@@ -20,8 +20,10 @@ public class Main {
             }
         }
         final String dbURL = DB_URL_PREFIX + dbFilename;
-        DBCompanyDAO CompanyDAO = new DBCompanyDAO(dbURL);
-        CarSharingUI ui = new CarSharingUI(CompanyDAO);
+        DBCompanyDAO companyDAO = new DBCompanyDAO(dbURL);
+        DBCarDAO carDAO = new DBCarDAO(dbURL);
+
+        CarSharingUI ui = new CarSharingUI(companyDAO, carDAO);
         ui.run();
     }
 }

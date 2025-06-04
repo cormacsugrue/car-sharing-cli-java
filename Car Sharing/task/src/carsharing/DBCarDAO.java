@@ -9,17 +9,17 @@ public class DBCarDAO implements CarDAO{
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS CAR";
     private static final String CREATE_DB = """
                                             CREATE TABLE IF NOT EXISTS car (
-                                                car_id INT PRIMARY KEY AUTO_INCREMENT,
+                                                id INT PRIMARY KEY AUTO_INCREMENT,
                                                 name VARCHAR(50) NOT NULL UNIQUE,
                                                 company_id INT NOT NULL,
                                                 CONSTRAINT fk_company FOREIGN KEY (company_id)
-                                                REFERENCES company(company_id)
+                                                REFERENCES company(id)
                                             )
                                             """;
     private static final String SELECT_ALL = "SELECT * FROM CAR";
     private static final String SELECT_BY_COMPANY = "SELECT * FROM CAR WHERE company_id = ?";
     private static final String INSERT_DATA = "INSERT INTO CAR (name, company_id) VALUES (?,?)";
-    private static final String DELETE_DATA = "DELETE FROM COMPANY WHERE car_id = ?";
+    private static final String DELETE_DATA = "DELETE FROM COMPANY WHERE id = ?";
 
     private final DBClient dbClient;
 
@@ -37,7 +37,7 @@ public class DBCarDAO implements CarDAO{
         return dbClient.query(
                 SELECT_ALL,
                 rs -> new Car(
-                        rs.getInt("car_id"),
+                        rs.getInt("id"),
                         rs.getString("name"),
                         rs.getInt("company_id")
                 )
@@ -55,7 +55,7 @@ public class DBCarDAO implements CarDAO{
         return dbClient.query(
                 SELECT_BY_COMPANY,
                 rs -> new Car(
-                        rs.getInt("car_id"),
+                        rs.getInt("id"),
                         rs.getString("name"),
                         rs.getInt("company_id")
                 ),

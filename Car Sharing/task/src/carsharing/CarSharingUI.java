@@ -7,9 +7,11 @@ import java.util.Scanner;
 
 public class CarSharingUI {
     private final CompanyDAO companyDAO;
+    private final CarDAO carDAO;
     private final Scanner scanner = new Scanner(System.in);
 
-    public CarSharingUI(CompanyDAO companyDAO) {
+    public CarSharingUI(CompanyDAO companyDAO, CarDAO carDAO) {
+        this.carDAO = carDAO;
         this.companyDAO = companyDAO;
     }
 
@@ -101,6 +103,7 @@ public class CarSharingUI {
     private void companyMenu(int companyID) {
         boolean running = true;
         Company company = companyDAO.findById(companyID);
+        System.out.println();
         if(company == null) {
             System.out.println("Invalid input, Please enter a number from the given list");
             running = false;
@@ -110,9 +113,9 @@ public class CarSharingUI {
 
         while(running) {
             System.out.println("""
-                    1. Car list
-                    2. Create a car
-                    0. Back
+                   1. Car list
+                   2. Create a car
+                   0. Back
                    """);
             String input = scanner.nextLine();
 
@@ -120,8 +123,8 @@ public class CarSharingUI {
                 int command = Integer.parseInt(input);
                 
                 switch (command) {
-                    case 1 -> listCars();
-                    case 2 -> createCar();
+                    case 1 -> listCars(company);
+                    case 2 -> createCar(company);
                     case 0 -> running = false;
                     default -> System.out.println("Invalid input, Please enter a number between 0 and 2");
                 }
@@ -132,10 +135,39 @@ public class CarSharingUI {
         }
     }
 
-    private void createCar() {
+    private void createCar(Company company) {
+
+        System.out.println("\nEnter the car name: ");
+        String carName = scanner.nextLine();
+
+        Car newCar = new Car(1, carName, company.getId() );
+        try {
+            carDAO.add(newCar);
+            System.out.println("The car was added!\n");
+
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("already exists")) {
+                System.out.println(e.getMessage());
+            }
+
+        }
     }
 
-    private void listCars() {
+    private void listCars(Company company) {
+        List<Car> cars = carDAO.findByCompanyID(company.getId());
+        if (cars.isEmpty()) {
+            System.out.println("The car list is empty!");
+            System.out.println();
+        } else {
+            System.out.println();
+            System.out.println("Car list:");
+            for (int i = 0; i < cars.size(); i++) {
+                System.out.print((i + 1) + ". ");
+                System.out.println(cars.get(i).getName());
+            }
+            System.out.println();
+        }
+
     }
 
     private void addCompany() {
