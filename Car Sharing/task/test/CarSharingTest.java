@@ -198,18 +198,18 @@ public class CarSharingTest extends StageTest<Void> {
 
         program.execute("1");
         program.execute("2");
-        program.execute("Car To Go");
+        program.execute("carsharing.Car To Go");
         program.execute("2");
         program.execute("Drive Now");
 
-        db.checkCompany("Car To Go");
+        db.checkCompany("carsharing.Car To Go");
         db.checkCompany("Drive Now");
 
         output = program.execute("1");
 
-        if (!output.contains("1. Car To Go")) {
+        if (!output.contains("1. carsharing.Car To Go")) {
             return wrong("In the company list expected one company.\n" +
-                "Your output should contain '1. Car To Go'.\n" +
+                "Your output should contain '1. carsharing.Car To Go'.\n" +
                 "Companies should be sorted by 'ID' column");
         }
 
@@ -226,8 +226,8 @@ public class CarSharingTest extends StageTest<Void> {
 
         output = program.execute("1");
 
-        if (!output.contains("1. Car list")) {
-            return wrong("After choosing company you should print menu that contains '1. Car list' item");
+        if (!output.contains("1. carsharing.Car list")) {
+            return wrong("After choosing company you should print menu that contains '1. carsharing.Car list' item");
         }
 
         if (!output.contains("2. Create a car")) {
@@ -252,11 +252,11 @@ public class CarSharingTest extends StageTest<Void> {
         }
 
         program.execute("Hyundai Venue");
-        db.checkCar("Car To Go", "Hyundai Venue");
+        db.checkCar("carsharing.Car To Go", "Hyundai Venue");
 
         program.execute("2");
         program.execute("Maruti Suzuki Dzire");
-        db.checkCar("Car To Go", "Maruti Suzuki Dzire");
+        db.checkCar("carsharing.Car To Go", "Maruti Suzuki Dzire");
 
         output = program.execute("1");
 

@@ -10,7 +10,7 @@ public class DBCompanyDAO implements CompanyDAO{
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS COMPANY";
     private static final String CREATE_DB = """
                                             CREATE TABLE IF NOT EXISTS COMPANY (
-                                                id INT PRIMARY KEY AUTO_INCREMENT, 
+                                                id INT PRIMARY KEY AUTO_INCREMENT,
                                                 name VARCHAR(50) NOT NULL UNIQUE
                                             )
                                             """;

@@ -1,3 +1,5 @@
+package carsharing;
+
 public class Car {
     private final int id;
     private String name;
