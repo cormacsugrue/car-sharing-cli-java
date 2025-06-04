@@ -34,12 +34,24 @@ public class DBCompanyDAO implements CompanyDAO{
 
     @Override
     public List<Company> findAll() {
-        return dbClient.selectForList(SELECT_ALL);
+        return dbClient.query(
+                SELECT_ALL,
+                rs -> new Company(
+                        rs.getInt("company_id"),
+                        rs.getString("name")
+                )
+        );
     }
 
     @Override
     public Company findById(int id) {
-        return dbClient.select(SELECT, id);
+        return dbClient.queryOne(
+                SELECT,
+                rs -> new Company(
+                        rs.getInt("company_id"),
+                        rs.getString("name")
+                )
+        );
     }
 
     @Override

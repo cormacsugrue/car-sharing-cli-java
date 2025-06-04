@@ -15,67 +15,53 @@ public class DBClient {
         this.dataSource = dataSource;
     }
 
-    public void run(String sql, Object... Params) {
+    public void run(String sql, Object... params) {
 
         try(Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)
         ) {
-            for (int i = 0; i < Params.length; i++) {
-                statement.setObject(i + 1, Params[i]);
+            for (int i = 0; i < params.length; i++) {
+                statement.setObject(i + 1, params[i]);
             }
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("A company with that name already exists. Please provide a different name", e);
+            throw new RuntimeException("Error executing sql statement" + sql + e);
         }
     }
 
-    public Company select(String sql, Object... params) {
 
-        Company result = null;
+    public <T> List<T> query(String sql, ResultSetMapper<T> mapper, Object... params) {
+        List<T> results = new ArrayList<>();
+
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)
-        ){
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
             for (int i = 0; i < params.length; i++) {
                 statement.setObject(i + 1, params[i]);
             }
 
-            try (ResultSet resultSet = statement.executeQuery()){
-                if (resultSet.next()) {
-                    int id = resultSet.getInt("company_id");
-                    String name = resultSet.getString("name");
-                    result = new Company(id, name);
-
-                    if(resultSet.next()) {
-                        throw new IllegalStateException("Query returned more than one object");
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public List<Company> selectForList(String sql, Object... params) {
-
-        List<Company> companies = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-        ){
-            for (int i = 0; i < params.length; i++) {
-                statement.setObject(i + 1, params[i]);
-            }
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while(resultSet.next()) {
-                    Company nextCompany = new Company(resultSet.getInt("company_id"), resultSet.getString("name"));
-                    companies.add(nextCompany);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    results.add(mapper.map(rs));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return companies;
+        return results;
+    }
+
+    public <T> T queryOne(String sql, ResultSetMapper mapper, Object... params) {
+
+        List<T> results = query(sql, mapper, params);
+
+        if (results.isEmpty()) {
+            return null;
+        }
+        if (results.size() > 1) {
+            throw new IllegalStateException("Expected at most one result but returned: " + results.size());
+        }
+        return results.get(0);
+
     }
 }
