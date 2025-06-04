@@ -50,7 +50,8 @@ public class DBCompanyDAO implements CompanyDAO{
                 rs -> new Company(
                         rs.getInt("company_id"),
                         rs.getString("name")
-                )
+                ),
+                id
         );
     }
 
