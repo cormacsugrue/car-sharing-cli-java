@@ -41,7 +41,7 @@ public class DBClient {
 
             try (ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
+                    int id = resultSet.getInt("company_id");
                     String name = resultSet.getString("name");
                     result = new Company(id, name);
 
@@ -69,7 +69,7 @@ public class DBClient {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while(resultSet.next()) {
-                    Company nextCompany = new Company(resultSet.getInt("id"), resultSet.getString("name"));
+                    Company nextCompany = new Company(resultSet.getInt("company_id"), resultSet.getString("name"));
                     companies.add(nextCompany);
                 }
             }

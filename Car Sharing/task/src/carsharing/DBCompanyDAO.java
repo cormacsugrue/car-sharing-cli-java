@@ -7,17 +7,17 @@ import java.util.List;
 
 public class DBCompanyDAO implements CompanyDAO{
     private final String connectionUrl;
-    private static final String DROP_TABLE = "DROP TABLE IF EXISTS COMPANY";
+    private static final String DROP_TABLE = "DROP TABLE IF EXISTS company";
     private static final String CREATE_DB = """
                                             CREATE TABLE IF NOT EXISTS COMPANY (
-                                                id INT PRIMARY KEY AUTO_INCREMENT,
+                                                company_id INT PRIMARY KEY AUTO_INCREMENT,
                                                 name VARCHAR(50) NOT NULL UNIQUE
                                             )
                                             """;
     private static final String SELECT_ALL = "SELECT * FROM COMPANY";
-    private static final String SELECT = "SELECT * FROM COMPANY WHERE id = ?";
+    private static final String SELECT = "SELECT * FROM COMPANY WHERE company_id = ?";
     private static final String INSERT_DATA = "INSERT INTO COMPANY (name) VALUES (?)";
-    private static final String DELETE_DATA = "DELETE FROM COMPANY WHERE id = ?";
+    private static final String DELETE_DATA = "DELETE FROM COMPANY WHERE company_id = ?";
 
     private final DBClient dbClient;
 
