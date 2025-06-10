@@ -45,3 +45,7 @@ Thumbs.db
 # Databases
 *.mv.db
 *.trace.db
+
+
+# Test
+Car Sharing/task/test/
