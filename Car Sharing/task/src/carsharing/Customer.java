@@ -31,7 +31,7 @@ public class Customer {
         return currentRental;
     }
 
-    public void setCurrentRental(int currentRental) {
+    public void setCurrentRental(Integer currentRental) {
         this.currentRental = currentRental;
     }
 

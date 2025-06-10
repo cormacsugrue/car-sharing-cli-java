@@ -23,6 +23,10 @@ public class DBCustomerDAO implements CustomerDAO{
                                                 SET rented_car_id = ?
                                                 WHERE id = ?
                                                 """;
+    private static final String SELECT_BY_ID = """
+                                                SELECT * FROM customer
+                                                WHERE id = ?
+                                                """;
 
 
     private final DBClient dbClient;
@@ -44,6 +48,19 @@ public class DBCustomerDAO implements CustomerDAO{
                         rs.getString("name"),
                         rs.getObject("rented_car_id", Integer.class)
                 )
+        );
+    }
+
+    @Override
+    public Customer findById(int id) {
+        return dbClient.queryOne(
+                SELECT_BY_ID,
+                rs -> new Customer(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getObject("rented_car_id", Integer.class)
+                ),
+                id
         );
     }
 

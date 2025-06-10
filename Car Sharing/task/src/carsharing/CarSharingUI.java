@@ -76,6 +76,8 @@ public class CarSharingUI {
 
         while(running) {
             printCustomerMenu();
+            // Refresh in memory snapshot of customer
+            customer = customerDAO.findById(customer.getId());
             int userCommand = requestNavInput();
 
 
@@ -86,6 +88,8 @@ public class CarSharingUI {
                 case 0 -> running = false;
                 default -> System.out.println("Invalid input, Please enter a number between 0 and 2");
             }
+
+
 
         }
     }
@@ -110,9 +114,14 @@ public class CarSharingUI {
     }
 
     private void returnCar(Customer customer) {
-
+        if (customer.getCurrentRentalId() == null) {
+            System.out.println("You didn't rent a car!");
+        }
+        else {
+            customerDAO.updateRental(customer, null);
+            System.out.println("Your returned a rented car!");
+        }
     }
-
     private void displayUserRental(Customer customer) {
         Integer rentalId = customer.getCurrentRentalId();
         if (rentalId == null) {
