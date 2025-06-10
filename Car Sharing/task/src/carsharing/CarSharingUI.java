@@ -29,6 +29,7 @@ public class CarSharingUI {
                 int command = Integer.parseInt(input);
                 switch (command) {
                     case 1 -> managerMenu();
+                    case 2 -> customerMenu();
                     case 0 -> {
                         running = false;
                     }
@@ -42,6 +43,10 @@ public class CarSharingUI {
 
         }
 
+    }
+
+    private void customerMenu() {
+        System.out.println("Customer menu accessed");
     }
 
     private void managerMenu() {
@@ -190,6 +195,7 @@ public class CarSharingUI {
         System.out.print("""
                 
                 1. Log in as a manager
+                2. Log in as a customer
                 0. Exit
                 """);
     }
