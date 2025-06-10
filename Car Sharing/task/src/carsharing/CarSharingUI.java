@@ -52,13 +52,14 @@ public class CarSharingUI {
 
         while(running) {
             printManagerMenu();
-            String input = scanner.nextLine();
             int command = requestNavInput();
                 switch (command) {
                     case 1 -> {
                         List<Company> currentCompanies = listCompanies();
+                        int input = requestNavInput();
+                        int companyId =  input - 1;
+                        if (input == 0) break; //
                         if (!currentCompanies.isEmpty()) {
-                            int companyId = requestNavInput() - 1;
                             companyMenu(currentCompanies.get(companyId));
                         }
                     }
@@ -80,9 +81,8 @@ public class CarSharingUI {
 
             switch (userCommand) {
                 case 1 -> rentACar(customer);
-                case 2 -> { // "Return rented car"
-                    returnCar();
-                }
+                case 2 -> returnCar(customer);
+                case 3 -> displayUserRental(customer);
                 case 0 -> running = false;
                 default -> System.out.println("Invalid input, Please enter a number between 0 and 2");
             }
@@ -92,7 +92,7 @@ public class CarSharingUI {
 
     private void rentACar(Customer customer) {
 
-        if (customer.getCurrentRental() == null) {
+        if (customer.getCurrentRentalId() != null) {
             System.out.println("You've already rented a car!");
             return;
         }
@@ -109,7 +109,22 @@ public class CarSharingUI {
         }
     }
 
-    private void returnCar() {
+    private void returnCar(Customer customer) {
+
+    }
+
+    private void displayUserRental(Customer customer) {
+        Integer rentalId = customer.getCurrentRentalId();
+        if (rentalId == null) {
+            System.out.println("You didn't rent a car!");
+        } else {
+            Car rental = carDAO.findById(rentalId);
+            StringBuilder sb = new StringBuilder("Your rented car:\n");
+            sb.append(rental.getName());
+            sb.append("\nCompany: \n");
+            sb.append(companyDAO.findById(rental.getCompanyID()).getName());
+            System.out.println(sb);
+        }
     }
 
     // returns true if companies found, else returns false

@@ -31,7 +31,7 @@ public class DBCustomerDAO implements CustomerDAO{
         JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setUrl(connectionUrl);
         this.dbClient = new DBClient(dataSource);
-        dbClient.run(DROP_TABLE);
+//        dbClient.run(DROP_TABLE);
         dbClient.run(CREATE_DB);
     }
 
@@ -42,7 +42,7 @@ public class DBCustomerDAO implements CustomerDAO{
                 rs -> new Customer(
                         rs.getInt("id"),
                         rs.getString("name"),
-                        rs.getInt("rented_car_id")
+                        rs.getObject("rented_car_id", Integer.class)
                 )
         );
     }

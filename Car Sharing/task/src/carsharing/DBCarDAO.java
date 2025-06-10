@@ -18,6 +18,7 @@ public class DBCarDAO implements CarDAO{
                                             """;
     private static final String SELECT_ALL = "SELECT * FROM CAR";
     private static final String SELECT_BY_COMPANY = "SELECT * FROM CAR WHERE company_id = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM CAR WHERE id = ?";
     private static final String INSERT_DATA = "INSERT INTO CAR (name, company_id) VALUES (?,?)";
     private static final String DELETE_DATA = "DELETE FROM COMPANY WHERE id = ?";
 
@@ -28,7 +29,7 @@ public class DBCarDAO implements CarDAO{
         dataSource.setUrl(connectionUrl);
 
         this.dbClient = new DBClient(dataSource);
-        dbClient.run(DROP_TABLE);
+//        dbClient.run(DROP_TABLE);
         dbClient.run(CREATE_DB);
     }
 
@@ -60,6 +61,19 @@ public class DBCarDAO implements CarDAO{
                         rs.getInt("company_id")
                 ),
                 companyID
+        );
+    }
+
+    @Override
+    public Car findById(int id) {
+        return dbClient.queryOne(
+                SELECT_BY_ID,
+                rs -> new Car(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("company_id")
+                ),
+                id
         );
     }
 }

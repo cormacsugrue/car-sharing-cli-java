@@ -27,7 +27,7 @@ public class Customer {
         this.name = name;
     }
 
-    public Integer getCurrentRental() {
+    public Integer getCurrentRentalId() {
         return currentRental;
     }
 

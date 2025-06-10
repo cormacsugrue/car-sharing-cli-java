@@ -27,7 +27,7 @@ public class DBCompanyDAO implements CompanyDAO{
         dataSource.setUrl(connectionUrl);
 
         this.dbClient = new DBClient(dataSource);
-        dbClient.run(DROP_TABLE);
+//        dbClient.run(DROP_TABLE);
         dbClient.run(CREATE_DB);
 
     }
