@@ -1,5 +1,6 @@
 package carsharing;
 
+import javax.sound.midi.Soundbank;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -33,6 +34,7 @@ public class CarSharingUI {
                 switch (command) {
                     case 1 -> managerMenu();
                     case 2 -> listCustomers();
+                    case 3 -> createCustomer();
                     case 0 -> {
                         running = false;
                     }
@@ -163,7 +165,7 @@ public class CarSharingUI {
 
             try {
                 int command = Integer.parseInt(input);
-                
+
                 switch (command) {
                     case 1 -> listCars(company);
                     case 2 -> createCar(company);
@@ -173,7 +175,7 @@ public class CarSharingUI {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, Please enter a number between 0 and 2");
             }
-            
+
         }
     }
 
@@ -192,6 +194,21 @@ public class CarSharingUI {
                 System.out.println(e.getMessage());
             }
 
+        }
+    }
+
+    private void createCustomer() {
+        System.out.println("\nEnter the customer name");
+        String customerName = scanner.nextLine();
+
+        Customer customer = new Customer(0, customerName, null);
+        try {
+            customerDAO.addCustomer(customer);
+            System.out.println("The customer was added!");
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("already exists")) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -233,6 +250,7 @@ public class CarSharingUI {
                 
                 1. Log in as a manager
                 2. Log in as a customer
+                3. Create a customer
                 0. Exit
                 """);
     }

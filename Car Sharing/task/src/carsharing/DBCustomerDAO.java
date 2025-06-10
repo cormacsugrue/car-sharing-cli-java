@@ -54,7 +54,7 @@ public class DBCustomerDAO implements CustomerDAO{
     }
 
     @Override
-    public void updateRental(Customer customer, Car car) {
-        dbClient.run(UPDATE_RENTAL, car.getId(), customer.getId());
+    public void updateRental(Customer customer, Integer carId) {
+        dbClient.run(UPDATE_RENTAL, carId, customer.getId());
     }
 }

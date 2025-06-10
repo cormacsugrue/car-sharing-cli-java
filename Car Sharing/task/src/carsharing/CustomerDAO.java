@@ -5,5 +5,5 @@ import java.util.List;
 public interface CustomerDAO {
     List<Customer> findALL();
     void addCustomer(Customer customer);
-    void updateRental(Customer customer, Car car);
+    void updateRental(Customer customer, Integer carId);
 }

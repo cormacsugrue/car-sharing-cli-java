@@ -6,7 +6,7 @@ import java.util.List;
 
 public class DBCarDAO implements CarDAO{
 
-    private static final String DROP_TABLE = "DROP TABLE IF EXISTS CAR";
+    private static final String DROP_TABLE = "DROP TABLE IF EXISTS CAR cascade";
     private static final String CREATE_DB = """
                                             CREATE TABLE IF NOT EXISTS car (
                                                 id INT PRIMARY KEY AUTO_INCREMENT,

@@ -3,9 +3,13 @@ package carsharing;
 public class Customer {
     private final int id;
     private String name;
-    private int currentRental;
+    private Integer currentRental;
 
-    public Customer(int id, String name, int currentRental) {
+    public Customer(int id, String name) {
+        this(id, name, null);
+    }
+
+    public Customer(int id, String name, Integer currentRental) {
         this.id = id;
         this.name = name;
         this.currentRental = currentRental;
