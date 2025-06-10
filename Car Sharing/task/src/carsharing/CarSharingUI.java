@@ -8,11 +8,14 @@ import java.util.Scanner;
 public class CarSharingUI {
     private final CompanyDAO companyDAO;
     private final CarDAO carDAO;
+    private final CustomerDAO customerDAO;
     private final Scanner scanner = new Scanner(System.in);
 
-    public CarSharingUI(CompanyDAO companyDAO, CarDAO carDAO) {
+    public CarSharingUI(CompanyDAO companyDAO, CarDAO carDAO, CustomerDAO customerDAO) {
         this.carDAO = carDAO;
         this.companyDAO = companyDAO;
+        this.customerDAO = customerDAO;
+
     }
 
     public void run() {
@@ -29,7 +32,7 @@ public class CarSharingUI {
                 int command = Integer.parseInt(input);
                 switch (command) {
                     case 1 -> managerMenu();
-                    case 2 -> customerMenu();
+                    case 2 -> listCustomers();
                     case 0 -> {
                         running = false;
                     }
@@ -43,10 +46,6 @@ public class CarSharingUI {
 
         }
 
-    }
-
-    private void customerMenu() {
-        System.out.println("Customer menu accessed");
     }
 
     private void managerMenu() {
@@ -70,6 +69,11 @@ public class CarSharingUI {
         }
     }
 
+    private void customerMenu(int command) {
+
+        System.out.println("Customer menu accessed");
+    }
+
     private void listCompanies() {
 
         List<Company> companies = companyDAO.findAll();
@@ -82,6 +86,39 @@ public class CarSharingUI {
                     .forEach(company -> System.out.println(company.toString()));
             System.out.println("0. Back");
             selectCompany();
+        }
+    }
+
+    private void listCustomers() {
+        List<Customer> customers = customerDAO.findALL();
+        if (customers.isEmpty()) {
+            System.out.println("The customer list is empty!");
+        } else {
+            System.out.println();
+            System.out.println("Choose a customer:");
+            customers.forEach(customer -> System.out.println(customer.toString()));
+            System.out.println("0. Back");
+            selectCustomer();
+        }
+    }
+
+    private void selectCustomer() {
+        boolean running = true;
+
+        while (running) {
+            String input = scanner.nextLine();
+
+            try {
+                int command = Integer.parseInt(input);
+                if (command == 0) {
+                    running = false;
+                } else {
+                    customerMenu(command);
+                    running = false;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, Please input an integer value");
+            }
         }
     }
 

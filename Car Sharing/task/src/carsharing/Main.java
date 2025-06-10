@@ -22,8 +22,9 @@ public class Main {
         final String dbURL = DB_URL_PREFIX + dbFilename;
         DBCompanyDAO companyDAO = new DBCompanyDAO(dbURL);
         DBCarDAO carDAO = new DBCarDAO(dbURL);
+        DBCustomerDAO customerDAO = new DBCustomerDAO(dbURL);
 
-        CarSharingUI ui = new CarSharingUI(companyDAO, carDAO);
+        CarSharingUI ui = new CarSharingUI(companyDAO, carDAO, customerDAO);
         ui.run();
     }
 }
