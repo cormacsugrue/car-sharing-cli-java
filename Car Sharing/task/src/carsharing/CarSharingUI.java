@@ -1,8 +1,5 @@
 package carsharing;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -56,27 +53,67 @@ public class CarSharingUI {
         while(running) {
             printManagerMenu();
             String input = scanner.nextLine();
-
-            try {
-                int command = Integer.parseInt(input);
+            int command = requestNavInput();
                 switch (command) {
-                    case 1 -> listCompanies();
+                    case 1 -> {
+                        List<Company> currentCompanies = listCompanies();
+                        if (!currentCompanies.isEmpty()) {
+                            int companyId = requestNavInput() - 1;
+                            companyMenu(currentCompanies.get(companyId));
+                        }
+                    }
                     case 2 -> addCompany();
                     case 0 -> running = false;
                     default -> System.out.println("Invalid input, Please enter a number between 0 and 2");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input, Please enter a number between 0 and 2");
+        }
+    }
+
+    private void customerMenu(Customer customer) {
+
+        boolean running = true;
+
+        while(running) {
+            printCustomerMenu();
+            int userCommand = requestNavInput();
+
+
+            switch (userCommand) {
+                case 1 -> rentACar(customer);
+                case 2 -> { // "Return rented car"
+                    returnCar();
+                }
+                case 0 -> running = false;
+                default -> System.out.println("Invalid input, Please enter a number between 0 and 2");
+            }
+
+        }
+    }
+
+    private void rentACar(Customer customer) {
+
+        if (customer.getCurrentRental() == null) {
+            System.out.println("You've already rented a car!");
+            return;
+        }
+        List<Company> currentCompanies = listCompanies();
+        if (!currentCompanies.isEmpty()) {
+            int companyId = requestNavInput() - 1;
+            List<Car> cars = listCars(currentCompanies.get(companyId));
+            if (!cars.isEmpty()) {
+                int carId = requestNavInput();
+                customerDAO.updateRental(customer, carId);
+
+                System.out.println("You rented '" + cars.get(carId - 1).getName() + "'");
             }
         }
     }
 
-    private void customerMenu(int command) {
-
-        System.out.println("Customer menu accessed");
+    private void returnCar() {
     }
 
-    private void listCompanies() {
+    // returns true if companies found, else returns false
+    private List<Company> listCompanies() {
 
         List<Company> companies = companyDAO.findAll();
         if (companies.isEmpty()) {
@@ -87,8 +124,8 @@ public class CarSharingUI {
             companyDAO.findAll().stream()
                     .forEach(company -> System.out.println(company.toString()));
             System.out.println("0. Back");
-            selectCompany();
         }
+        return companies;
     }
 
     private void listCustomers() {
@@ -100,11 +137,11 @@ public class CarSharingUI {
             System.out.println("Choose a customer:");
             customers.forEach(customer -> System.out.println(customer.toString()));
             System.out.println("0. Back");
-            selectCustomer();
+            selectCustomer(customers);
         }
     }
 
-    private void selectCustomer() {
+    private void selectCustomer(List<Customer> customers) {
         boolean running = true;
 
         while (running) {
@@ -115,7 +152,7 @@ public class CarSharingUI {
                 if (command == 0) {
                     running = false;
                 } else {
-                    customerMenu(command);
+                    customerMenu(customers.get(command - 1));
                     running = false;
                 }
             } catch (NumberFormatException e) {
@@ -124,35 +161,32 @@ public class CarSharingUI {
         }
     }
 
-    private void selectCompany() {
+    private int requestNavInput() {
         boolean running = true;
-
+        int command = -1;
         while(running) {
             String input = scanner.nextLine();
 
             try {
-                int command = Integer.parseInt(input);
-                if(command == 0) {
+                command = Integer.parseInt(input);
+//                    companyMenu(command);
                     running = false;
-                } else {
-                    companyMenu(command);
-                    running = false;
-                }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, Please input an integer value");
             }
         }
+        return command;
     }
 
-    private void companyMenu(int companyID) {
+    private void companyMenu(Company company) {
         boolean running = true;
-        Company company = companyDAO.findById(companyID);
+
         System.out.println();
         if(company == null) {
             System.out.println("Invalid input, Please enter a number from the given list");
             running = false;
         } else {
-            System.out.println("'" + companyDAO.findById(companyID).getName() + "' company");
+            System.out.println("'" + company.getName() + "' company");
         }
 
         while(running) {
@@ -212,7 +246,7 @@ public class CarSharingUI {
         }
     }
 
-    private void listCars(Company company) {
+    private List<Car> listCars(Company company) {
         List<Car> cars = carDAO.findByCompanyID(company.getId());
         if (cars.isEmpty()) {
             System.out.println("The car list is empty!");
@@ -226,7 +260,7 @@ public class CarSharingUI {
             }
             System.out.println();
         }
-
+        return cars;
     }
 
     private void addCompany() {
@@ -262,5 +296,15 @@ public class CarSharingUI {
                 2. Create a company
                 0. Back
                 """);
+    }
+
+    private void printCustomerMenu() {
+        System.out.print("""
+               
+               1. Rent a car
+               2. Return a rented car
+               3. My rented car
+               0. Back
+               """);
     }
 }
