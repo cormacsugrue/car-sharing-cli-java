@@ -56,6 +56,7 @@ public class CarSharingUI {
                 switch (command) {
                     case 1 -> {
                         List<Company> currentCompanies = listCompanies();
+                        if (currentCompanies.isEmpty()) break;
                         int input = requestNavInput();
                         int companyId =  input - 1;
                         if (input == 0) break; //
@@ -97,7 +98,7 @@ public class CarSharingUI {
     private void rentACar(Customer customer) {
 
         if (customer.getCurrentRentalId() != null) {
-            System.out.println("You've already rented a car!");
+            System.out.println("\nYou've already rented a car!");
             return;
         }
         List<Company> currentCompanies = listCompanies();
@@ -105,21 +106,28 @@ public class CarSharingUI {
             int companyId = requestNavInput() - 1;
             List<Car> cars = listCars(currentCompanies.get(companyId));
             if (!cars.isEmpty()) {
-                int carId = requestNavInput();
-                customerDAO.updateRental(customer, carId);
+                int choice = requestNavInput();
+                if (choice == 0) return;              // user hit “Back”
+                int idx = choice - 1;
+                if (idx < 0 || idx >= cars.size()) {
+                    System.out.println("Invalid selection");
+                    return;
+                }
+                Car picked = cars.get(idx);
+                customerDAO.updateRental(customer, picked.getId());  // use actual PK
+                System.out.println("You rented '" + picked.getName() + "'");
 
-                System.out.println("You rented '" + cars.get(carId - 1).getName() + "'");
             }
         }
     }
 
     private void returnCar(Customer customer) {
         if (customer.getCurrentRentalId() == null) {
-            System.out.println("You didn't rent a car!");
+            System.out.println("\nYou didn't rent a car!");
         }
         else {
             customerDAO.updateRental(customer, null);
-            System.out.println("Your returned a rented car!");
+            System.out.println("You've returned a rented car!");
         }
     }
     private void displayUserRental(Customer customer) {
@@ -128,7 +136,7 @@ public class CarSharingUI {
             System.out.println("You didn't rent a car!");
         } else {
             Car rental = carDAO.findById(rentalId);
-            StringBuilder sb = new StringBuilder("Your rented car:\n");
+            StringBuilder sb = new StringBuilder("\nYour rented car:\n");
             sb.append(rental.getName());
             sb.append("\nCompany: \n");
             sb.append(companyDAO.findById(rental.getCompanyID()).getName());
@@ -256,7 +264,7 @@ public class CarSharingUI {
     }
 
     private void createCustomer() {
-        System.out.println("\nEnter the customer name");
+        System.out.println("\nEnter the customer name:");
         String customerName = scanner.nextLine();
 
         Customer customer = new Customer(0, customerName, null);
@@ -271,7 +279,7 @@ public class CarSharingUI {
     }
 
     private List<Car> listCars(Company company) {
-        List<Car> cars = carDAO.findByCompanyID(company.getId());
+        List<Car> cars = carDAO.findAllNotRented(company.getId());
         if (cars.isEmpty()) {
             System.out.println("The car list is empty!");
             System.out.println();
@@ -288,7 +296,7 @@ public class CarSharingUI {
     }
 
     private void addCompany() {
-        System.out.println("\nEnter the company name: ");
+        System.out.println("\nEnter the company name:");
         String companyName = scanner.nextLine();
 
         Company newCompany = new Company(1, companyName);

@@ -7,5 +7,6 @@ public interface CarDAO {
      void add(Car car);
      List<Car> findByCompanyID(int companyID);
      Car findById(int companyID);
+     List<Car> findAllNotRented(int id);
 
 }

@@ -23,10 +23,18 @@ public class DBCustomerDAO implements CustomerDAO{
                                                 SET rented_car_id = ?
                                                 WHERE id = ?
                                                 """;
+    private static final String UPDATE_RENTAL_SET_NULL = """
+                                                UPDATE customer
+                                                SET rented_car_id = NULL
+                                                WHERE id = ?
+                                                """;
+
+
     private static final String SELECT_BY_ID = """
                                                 SELECT * FROM customer
                                                 WHERE id = ?
                                                 """;
+
 
 
     private final DBClient dbClient;
@@ -72,6 +80,10 @@ public class DBCustomerDAO implements CustomerDAO{
 
     @Override
     public void updateRental(Customer customer, Integer carId) {
-        dbClient.run(UPDATE_RENTAL, carId, customer.getId());
+        if (carId == null) {
+            dbClient.run(UPDATE_RENTAL_SET_NULL, customer.getId());
+        } else {
+            dbClient.run(UPDATE_RENTAL, carId, customer.getId());
+        }
     }
 }

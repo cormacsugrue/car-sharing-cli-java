@@ -21,6 +21,13 @@ public class DBCarDAO implements CarDAO{
     private static final String SELECT_BY_ID = "SELECT * FROM CAR WHERE id = ?";
     private static final String INSERT_DATA = "INSERT INTO CAR (name, company_id) VALUES (?,?)";
     private static final String DELETE_DATA = "DELETE FROM COMPANY WHERE id = ?";
+    private static final String SELECT_ALL_NOT_RENTED = """
+                                            SElECT car.* 
+                                            FROM car
+                                            LEFT JOIN customer ON car.id = customer.rented_car_id
+                                            WHERE customer.rented_car_id IS NULL
+                                            AND car.company_id = ?
+                                            """;
 
     private final DBClient dbClient;
 
@@ -68,6 +75,19 @@ public class DBCarDAO implements CarDAO{
     public Car findById(int id) {
         return dbClient.queryOne(
                 SELECT_BY_ID,
+                rs -> new Car(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("company_id")
+                ),
+                id
+        );
+    }
+
+    @Override
+    public List<Car> findAllNotRented(int id) {
+        return dbClient.query(
+                SELECT_ALL_NOT_RENTED,
                 rs -> new Car(
                         rs.getInt("id"),
                         rs.getString("name"),
