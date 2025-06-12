@@ -1,12 +1,14 @@
-package carsharing;
+package carsharing.model;
 
-public class Company {
+public class Car {
     private final int id;
     private String name;
+    private int companyID;
 
-    public Company(int id, String name) {
+    public Car(int id, String name, int companyID) {
         this.id = id;
         this.name = name;
+        this.companyID = companyID;
     }
 
     public int getId() {
@@ -19,6 +21,14 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getCompanyID() {
+        return companyID;
+    }
+
+    public void setCompanyID(int companyID) {
+        this.companyID = companyID;
     }
 
     @Override

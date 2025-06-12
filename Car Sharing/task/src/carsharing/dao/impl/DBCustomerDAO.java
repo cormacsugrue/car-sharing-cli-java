@@ -1,10 +1,13 @@
-package carsharing;
+package carsharing.dao.impl;
 
+import carsharing.util.DBClient;
+import carsharing.dao.CustomerDAO;
+import carsharing.model.Customer;
 import org.h2.jdbcx.JdbcDataSource;
 
 import java.util.List;
 
-public class DBCustomerDAO implements CustomerDAO{
+public class DBCustomerDAO implements CustomerDAO {
 
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS customer";
     private static final String CREATE_DB = """

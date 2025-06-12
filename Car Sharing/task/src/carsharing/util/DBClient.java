@@ -1,4 +1,4 @@
-package carsharing;
+package carsharing.util;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

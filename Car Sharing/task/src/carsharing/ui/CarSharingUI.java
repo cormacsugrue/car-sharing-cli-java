@@ -1,4 +1,11 @@
-package carsharing;
+package carsharing.ui;
+
+import carsharing.dao.CarDAO;
+import carsharing.dao.CompanyDAO;
+import carsharing.dao.CustomerDAO;
+import carsharing.model.Car;
+import carsharing.model.Company;
+import carsharing.model.Customer;
 
 import java.util.List;
 import java.util.Scanner;

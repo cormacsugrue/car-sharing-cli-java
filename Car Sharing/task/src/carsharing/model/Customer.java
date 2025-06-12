@@ -1,4 +1,4 @@
-package carsharing;
+package carsharing.model;
 
 public class Customer {
     private final int id;

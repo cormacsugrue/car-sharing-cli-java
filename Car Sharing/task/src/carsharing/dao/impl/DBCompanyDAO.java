@@ -1,11 +1,13 @@
-package carsharing;
+package carsharing.dao.impl;
 
+import carsharing.util.DBClient;
+import carsharing.dao.CompanyDAO;
+import carsharing.model.Company;
 import org.h2.jdbcx.JdbcDataSource;
 
-import java.sql.SQLException;
 import java.util.List;
 
-public class DBCompanyDAO implements CompanyDAO{
+public class DBCompanyDAO implements CompanyDAO {
     private final String connectionUrl;
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS company CASCADE";
     private static final String CREATE_DB = """

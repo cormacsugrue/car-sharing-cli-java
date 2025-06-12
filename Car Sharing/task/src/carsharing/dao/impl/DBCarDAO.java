@@ -1,10 +1,13 @@
-package carsharing;
+package carsharing.dao.impl;
 
+import carsharing.util.DBClient;
+import carsharing.dao.CarDAO;
+import carsharing.model.Car;
 import org.h2.jdbcx.JdbcDataSource;
 
 import java.util.List;
 
-public class DBCarDAO implements CarDAO{
+public class DBCarDAO implements CarDAO {
 
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS CAR cascade";
     private static final String CREATE_DB = """

@@ -1,8 +1,7 @@
-package carsharing;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+package carsharing.ui;
+import carsharing.dao.impl.DBCarDAO;
+import carsharing.dao.impl.DBCompanyDAO;
+import carsharing.dao.impl.DBCustomerDAO;
 
 
 public class Main {
