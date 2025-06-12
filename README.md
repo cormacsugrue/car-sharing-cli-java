@@ -46,11 +46,11 @@ The program is interactive and menu-driven, running in the console. It stores da
 
 The code is organized into the following Java packages under `src/main/java/carsharing`:
 
-- `` – Data models: `Car`, `Company`, `Customer` (POJOs with fields like `id`, `name`, and relational IDs such as `companyId` or `rentedCarId`).
-- `` – DAO interfaces: `CompanyDAO`, `CarDAO`, `CustomerDAO` defining CRUD and rental operations for each entity.
-- `` – JDBC implementations: `DBCompanyDAO`, `DBCarDAO`, `DBCustomerDAO` implementing the interfaces, handling schema creation (`CREATE TABLE IF NOT EXISTS`) and SQL queries/updates.
-- `` – Utilities: `DBClient` for managing the H2 database connection, and `ResultSetMapper` to map `ResultSet` rows to model objects.
-- `` – User interface classes: `CarSharingUI` for menu-driven interaction (printing menus, reading input, calling DAOs) and `Main` as the application entry point (initializes DAOs and starts the UI loop).
+- **Data models**: `Car`, `Company`, `Customer` (POJOs with fields like `id`, `name`, and relational IDs such as `companyId` or `rentedCarId`).
+- **DAO interfaces**: `CompanyDAO`, `CarDAO`, `CustomerDAO` defining CRUD and rental operations for each entity.
+- **JDBC implementations**: `DBCompanyDAO`, `DBCarDAO`, `DBCustomerDAO` implementing the interfaces, handling schema creation (`CREATE TABLE IF NOT EXISTS`) and SQL queries/updates.
+- **Utilities**: `DBClient` for managing the H2 database connection, and `ResultSetMapper` to map `ResultSet` rows to model objects.
+- **User interface classes**: `CarSharingUI` for menu-driven interaction (printing menus, reading input, calling DAOs) and `Main` as the application entry point (initializes DAOs and starts the UI loop).
 
 This structure cleanly separates concerns:
 
