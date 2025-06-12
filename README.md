@@ -44,21 +44,21 @@ The program is interactive and menu-driven, running in the console. It stores da
 
 ## Project Structure
 
-The code is organized into a single Java package `carsharing` containing:
+The code is organized into the following Java packages under `src/main/java/carsharing`:
 
-- **Models**: Plain Java objects for `Company`, `Car`, and `Customer` (each with fields like id and name, and possibly relationships like companyId or rentedCarId).
-- **DAO Interfaces**: `CompanyDAO`, `CarDAO`, `CustomerDAO` define operations for interacting with the database (e.g., retrieving lists, adding entries, updating rentals).
-- **DAO Implementations**: `DBCompanyDAO`, `DBCarDAO`, `DBCustomerDAO` implement the DAO interfaces using JDBC. They also handle database setup (creating tables if not present). These classes use SQL internally to query or update the H2 database.
-- **Utility**: `DBClient` manages the database connection (e.g., opening the connection to the H2 file) and possibly provides shared routines. `ResultSetMapper` is a helper to convert JDBC `ResultSet` data into Java objects (maps query results to `Car`/`Company`/`Customer` objects).
-- **UI**: `CarSharingUI` contains the menu logic and user interaction. It prints the menus, reads user input, and calls the appropriate DAO methods based on user choices.
-- **Main**: The entry point of the application. It initializes the DAO objects and starts the UI menu loop.
+- `` – Data models: `Car`, `Company`, `Customer` (POJOs with fields like `id`, `name`, and relational IDs such as `companyId` or `rentedCarId`).
+- `` – DAO interfaces: `CompanyDAO`, `CarDAO`, `CustomerDAO` defining CRUD and rental operations for each entity.
+- `` – JDBC implementations: `DBCompanyDAO`, `DBCarDAO`, `DBCustomerDAO` implementing the interfaces, handling schema creation (`CREATE TABLE IF NOT EXISTS`) and SQL queries/updates.
+- `` – Utilities: `DBClient` for managing the H2 database connection, and `ResultSetMapper` to map `ResultSet` rows to model objects.
+- `` – User interface classes: `CarSharingUI` for menu-driven interaction (printing menus, reading input, calling DAOs) and `Main` as the application entry point (initializes DAOs and starts the UI loop).
 
-This separation makes it clear which part of the code does what:
+This structure cleanly separates concerns:
 
-- The UI does not contain SQL code.
-- The database classes do not handle any printing or input.
-
-## Getting Started
+- **Models** know only about data fields.
+- **DAO interfaces** define operations without SQL.
+- **DAO implementations** contain all database-specific code.
+- **Utilities** provide shared, low-level support.
+- **UI** handles only user interaction, with no SQL or data mapping logic.## Getting Started
 
 ### Prerequisites
 
